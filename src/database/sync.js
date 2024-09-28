@@ -3,7 +3,7 @@ import Usuario from "../models/Usuario.js";
 import Restaurante from "../models/Restaurante.js";
 import Cardapio from "../models/Cardapio.js";
 import Pedido from "../models/Pedido.js";
-import ItensPedido from "../models/ItemPedido.js";
+import ItemPedido from "../models/ItemPedido.js";
 import Cliente from "../models/Cliente.js";
 import Pagamento from "../models/Pagamento.js";
 import UsuarioSessao from "../models/UsuarioSessao.js";

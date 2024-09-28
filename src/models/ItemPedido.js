@@ -3,7 +3,7 @@ import sequelize from "../database/db.js";
 import Pedido from "./Pedido.js";
 import Cardapio from "./Cardapio.js";
 
-const ItensPedido = sequelize.define(
+const ItemPedido = sequelize.define(
   "ItensPedido",
   {
     id: {
@@ -41,7 +41,7 @@ const ItensPedido = sequelize.define(
   }
 );
 
-ItensPedido.belongsTo(Pedido, { foreignKey: "pedido_id" });
-ItensPedido.belongsTo(Cardapio, { foreignKey: "item_cardapio_id" });
+ItemPedido.belongsTo(Pedido, { foreignKey: "pedido_id" });
+ItemPedido.belongsTo(Cardapio, { foreignKey: "item_cardapio_id" });
 
-export default ItensPedido;
+export default ItemPedido;
