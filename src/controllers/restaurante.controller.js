@@ -1,8 +1,21 @@
 import RestauranteService from "../services/RestauranteService.js";
 
 export async function createRestaurante(req, res) {
-  const { nome, email, telefone, endereco, horario_funcionamento } = req.body;
+  const { nome, email, telefone, endereco, horario_funcionamento, slug } = req.body;
   const usuario_id = req.user.id;
+
+  const { error } = restaurantSchema.validate({
+    nome,
+    email,
+    telefone,
+    endereco,
+    horario_funcionamento,
+    slug,
+  });
+
+  if (error) {
+    return res.status(400).json({ error: error.details[0].message });
+  }
 
   try {
     const restaurante = await RestauranteService.createRestaurante({
@@ -12,8 +25,9 @@ export async function createRestaurante(req, res) {
       telefone,
       endereco,
       horario_funcionamento,
+      slug,
     });
-    res.status(201).json(restaurante);
+    res.status(201).json({ restaurante });
   } catch (error) {
     res.status(400).json({ message: error.message });
   }
