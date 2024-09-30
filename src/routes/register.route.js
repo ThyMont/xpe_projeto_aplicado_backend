@@ -1,5 +1,5 @@
 import express from "express";
-import { register } from "../resources/register.resource.js";
+import { register } from "../controllers/register.controller.js";
 
 const router = express.Router();
 router.post("/", register);

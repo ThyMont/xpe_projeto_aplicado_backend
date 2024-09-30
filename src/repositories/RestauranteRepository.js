@@ -30,6 +30,14 @@ class RestauranteRepository {
       where: { email },
     });
   }
+
+  static async countByUsuarioId(usuarioId) {
+    return await Restaurante.count({
+      where: {
+        usuarioId,
+      },
+    });
+  }
 }
 
 export default new RestauranteRepository();

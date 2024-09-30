@@ -34,6 +34,11 @@ const Restaurante = sequelize.define(
       type: DataTypes.STRING, // URL ou caminho do arquivo da imagem da capa
       allowNull: true,
     },
+    slug: {
+      type: DataTypes.STRING,
+      unique: true, // Garante que o slug seja único
+      allowNull: false, // O slug é obrigatório
+    },
     usuario_id: {
       type: DataTypes.INTEGER,
       references: {
