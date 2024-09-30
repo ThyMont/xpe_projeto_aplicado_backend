@@ -26,6 +26,14 @@ const Restaurante = sequelize.define(
     horario_funcionamento: {
       type: DataTypes.STRING,
     },
+    avatar: {
+      type: DataTypes.STRING, // URL ou caminho do arquivo da imagem do avatar
+      allowNull: true,
+    },
+    capa: {
+      type: DataTypes.STRING, // URL ou caminho do arquivo da imagem da capa
+      allowNull: true,
+    },
     usuario_id: {
       type: DataTypes.INTEGER,
       references: {
