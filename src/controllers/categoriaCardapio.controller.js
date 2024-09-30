@@ -23,17 +23,6 @@ export async function updateCategoria(req, res) {
   }
 }
 
-export async function listCategorias(req, res) {
-  const { cardapio_id } = req.params;
-
-  try {
-    const categorias = await CategoriaCardapioService.listarCategorias(cardapio_id);
-    res.json(categorias);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-}
-
 export async function deleteCategoria(req, res) {
   const { id } = req.params;
 

@@ -21,7 +21,7 @@ const ItemCardapio = sequelize.define(
       type: DataTypes.DECIMAL(10, 2),
       allowNull: false,
     },
-    imagem: {
+    imagemUrl: {
       type: DataTypes.STRING, // URL da imagem
     },
     categoria_id: {

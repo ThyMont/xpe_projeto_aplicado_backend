@@ -4,17 +4,29 @@ import { cardapioSchema } from "../schemas/cardapioSchema.js"; // Supondo que vo
 export async function editarCardapio(req, res) {
   const { cardapioId } = req.params;
   const { descricao } = req.body;
+  const usuarioId = req.user.id;
 
   const { error } = cardapioSchema.validate({ descricao });
-
   if (error) {
-    return res.status(400).json({ error: error.details[0].message });
+    return res.status(400).json({ message: error.details[0].message });
   }
 
   try {
-    const cardapioAtualizado = await CardapioService.editarCardapio(cardapioId, { descricao });
-    res.status(200).json(cardapioAtualizado);
+    const cardapio = await CardapioService.editarCardapio(cardapioId, usuarioId, descricao);
+    res.status(200).json(cardapio);
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    res.status(error.status || 400).json({ message: error.message });
+  }
+}
+
+export async function listCategorias(req, res) {
+  const { cardapioId } = req.params;
+  const usuarioId = req.user.id;
+
+  try {
+    const categorias = await CardapioService.listarCategorias(cardapioId, usuarioId);
+    res.status(200).json(categorias);
+  } catch (error) {
+    res.status(error.status || 400).json({ message: error.message });
   }
 }

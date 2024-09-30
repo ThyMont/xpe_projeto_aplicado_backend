@@ -1,4 +1,5 @@
 import express from "express";
+import { swaggerUi, swaggerDocs } from "../swagger.js";
 import bodyParser from "body-parser";
 import registerRoutes from "./routes/register.route.js";
 import loginRoutes from "./routes/login.route.js";
@@ -16,14 +17,15 @@ app.use(bodyParser.json());
 app.get("/", (req, res) => {
   res.send("API - Go Appa");
 });
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
-app.use("/api/register", registerRoutes);
-app.use("/api/login", loginRoutes);
-app.use("/api/restaurante", restauranteRoutes);
-app.use("/api/profile", profileRoutes);
-app.use("/api/cardapio", cardapioRoutes);
-app.use("/api/categoriacardapio", categoriaCardapioRoutes);
-app.use("/api/itemCardapio", itemCardapioRoutes);
+app.use("/register", registerRoutes);
+app.use("/auth", loginRoutes);
+app.use("/restaurante", restauranteRoutes);
+app.use("/profile", profileRoutes);
+app.use("/cardapio", cardapioRoutes);
+app.use("/categoria", categoriaCardapioRoutes);
+app.use("/itemCardapio", itemCardapioRoutes);
 
 // Iniciar o servidor
 app.listen(port, () => {
