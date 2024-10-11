@@ -1,6 +1,13 @@
 import express from "express";
-import { createPedido, listarPedidos, detalharPedido } from "../controllers/pedido.controller.js";
+import {
+  createPedido,
+  listarPedidos,
+  detalharPedido,
+  atualizarStatusPedido,
+  listarHistoricoPedidos,
+} from "../controllers/pedido.controller.js";
 import authClienteMiddleware from "../middlewares/authClienteMiddleware.js";
+import authMiddleware from "../middlewares/authMiddleware.js"; // Middleware para autenticação do restaurante
 
 const router = express.Router();
 
@@ -135,5 +142,81 @@ router.get("/", authClienteMiddleware, listarPedidos); // Usando authClienteMidd
  */
 
 router.get("/:id", authClienteMiddleware, detalharPedido); // Usando authClienteMiddleware
+
+/**
+ * @swagger
+ * /pedido/{id}/status:
+ *   put:
+ *     summary: Atualiza o status de um pedido
+ *     tags: [Pedido]
+ *     security:
+ *       - bearerAuth: []
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: ID do pedido a ser atualizado
+ *         schema:
+ *           type: integer
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               status:
+ *                 type: string
+ *                 description: Novo status do pedido
+ *             required:
+ *               - status
+ *     responses:
+ *       200:
+ *         description: Status do pedido atualizado com sucesso
+ *       400:
+ *         description: Erro na validação dos dados
+ *       401:
+ *         description: Usuário não autorizado
+ *       404:
+ *         description: Pedido não encontrado
+ */
+
+router.put("/:id/status", authMiddleware, atualizarStatusPedido); // Atualizar status do pedido
+
+/**
+ * @swagger
+ * /pedido/historico:
+ *   get:
+ *     summary: Lista o histórico de pedidos de um restaurante
+ *     tags: [Pedido]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: Lista de histórico de pedidos
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 type: object
+ *                 properties:
+ *                   id:
+ *                     type: integer
+ *                     description: ID do pedido
+ *                   cliente_id:
+ *                     type: integer
+ *                     description: ID do cliente que fez o pedido
+ *                   status:
+ *                     type: string
+ *                     description: Status do pedido
+ *                   criado_em:
+ *                     type: string
+ *                     format: date-time
+ *       401:
+ *         description: Usuário não autorizado
+ */
+
+router.get("/historico", authMiddleware, listarHistoricoPedidos); // Listar histórico de pedidos
 
 export default router;

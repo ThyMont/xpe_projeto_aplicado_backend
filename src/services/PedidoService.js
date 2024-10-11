@@ -49,14 +49,16 @@ class PedidoService {
     }
   }
 
-  async listarPedidos(cliente_id) {
+  async listarPedidos(cliente_id, limit, offset) {
     try {
-      const pedidos = await PedidoRepository.findAll({
+      const { count, rows } = await PedidoRepository.findAndCountAll({
         where: { cliente_id },
         include: ["itens", "pagamentos"],
+        limit: parseInt(limit, 10),
+        offset: parseInt(offset, 10),
       });
 
-      const pedidosComTotal = pedidos.map((pedido) => {
+      const pedidosComTotal = rows.map((pedido) => {
         const total = pedido.itens.reduce((acc, item) => {
           return acc + item.preco * item.quantidade;
         }, 0);
@@ -67,7 +69,7 @@ class PedidoService {
         };
       });
 
-      return pedidosComTotal;
+      return { count, rows: pedidosComTotal };
     } catch (error) {
       throw new Error("Erro ao listar os pedidos: " + error.message);
     }

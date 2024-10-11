@@ -1,5 +1,4 @@
-import Pagamento from "../models/Pagamento.js";
-import Pedido from "../models/Pedido.js";
+import PedidoService from "../services/PedidoService.js";
 
 export const createPedido = async (req, res) => {
   const { items, metodo_pagamento } = req.body;
@@ -9,40 +8,36 @@ export const createPedido = async (req, res) => {
   }
 
   try {
-    const pedido = await Pedido.create({ cliente_id: req.user.id });
-
-    await Promise.all(
-      items.map((item) => {
-        return pedido.addItem(item.item_id, { through: { quantidade: item.quantidade } });
-      })
-    );
-
-    const pagamento = await Pagamento.create({
+    const { novoPedido, pagamento } = await PedidoService.registrarPedido({
+      cliente_id: req.user.id,
+      restaurante_id: req.user.restaurante_id,
+      itens: items,
       metodo_pagamento,
-      status_pagamento: "Pendente",
-      pedido_id: pedido.id,
     });
-
-    res.status(201).json({ pedido, pagamento });
+    res.status(201).json({ novoPedido, pagamento });
   } catch (error) {
     console.error("Erro ao criar pedido:", error);
-    res.status(500).json({ message: "Erro ao criar pedido." });
+    res.status(500).json({ message: error.message });
   }
 };
 
 export const listarPedidos = async (req, res) => {
-  try {
-    const pedidos = await Pedido.findAll({
-      where: {
-        cliente_id: req.user.id,
-      },
-      include: [Pagamento],
-    });
+  const { page = 1, limit = 10 } = req.query;
+  const offset = (page - 1) * limit;
 
-    res.status(200).json(pedidos);
+  try {
+    const { count, rows } = await PedidoService.listarPedidos(req.user.id, limit, offset);
+    const totalPages = Math.ceil(count / limit);
+
+    res.status(200).json({
+      totalItems: count,
+      totalPages,
+      currentPage: page,
+      pedidos: rows,
+    });
   } catch (error) {
     console.error("Erro ao listar pedidos:", error);
-    res.status(500).json({ message: "Erro ao listar pedidos." });
+    res.status(500).json({ message: error.message });
   }
 };
 
@@ -50,21 +45,62 @@ export const detalharPedido = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const pedido = await Pedido.findOne({
-      where: {
-        id,
-        cliente_id: req.user.id,
-      },
-      include: [Pagamento],
-    });
+    const pedido = await PedidoService.detalharPedido(id, req.user.id);
+    res.status(200).json(pedido);
+  } catch (error) {
+    console.error("Erro ao detalhar pedido:", error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
+export const atualizarStatusPedido = async (req, res) => {
+  const { id } = req.params;
+  const { status } = req.body;
+
+  if (!status) {
+    return res.status(400).json({ message: "Status é obrigatório." });
+  }
+
+  try {
+    const pedido = await PedidoRepository.findOne({ where: { id } });
 
     if (!pedido) {
       return res.status(404).json({ message: "Pedido não encontrado." });
     }
 
-    res.status(200).json(pedido);
+    pedido.status = status;
+    await pedido.save();
+
+    res.status(200).json({ message: "Status do pedido atualizado com sucesso.", pedido });
   } catch (error) {
-    console.error("Erro ao detalhar pedido:", error);
-    res.status(500).json({ message: "Erro ao detalhar pedido." });
+    console.error("Erro ao atualizar status do pedido:", error);
+    res.status(500).json({ message: "Erro ao atualizar status do pedido." });
+  }
+};
+
+export const listarHistoricoPedidos = async (req, res) => {
+  const { page = 1, limit = 10 } = req.query;
+  const offset = (page - 1) * limit;
+
+  try {
+    const { count, rows } = await Pedido.findAndCountAll({
+      where: {
+        restaurante_id: req.user.restaurante_id,
+      },
+      include: [Pagamento],
+      limit: parseInt(limit, 10),
+      offset: parseInt(offset, 10),
+    });
+
+    const totalPages = Math.ceil(count / limit);
+    res.status(200).json({
+      totalItems: count,
+      totalPages,
+      currentPage: page,
+      pedidos: rows,
+    });
+  } catch (error) {
+    console.error("Erro ao listar histórico de pedidos:", error);
+    res.status(500).json({ message: error.message });
   }
 };
