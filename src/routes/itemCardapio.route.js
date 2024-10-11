@@ -12,9 +12,9 @@ const router = express.Router();
 
 router.post("/", authMiddleware, createItem);
 
-router.get("/", authMiddleware, listarItens);
+router.get("/", listarItens);
 
-router.get("/:id", authMiddleware, getItemById);
+router.get("/:id", getItemById);
 
 router.put("/:id", authMiddleware, updateItem);
 
@@ -78,8 +78,6 @@ router.delete("/:id", authMiddleware, deleteItem);
  *   get:
  *     summary: Listar todos os itens do cardápio
  *     tags: [Itens do Cardápio]
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de itens do cardápio
@@ -93,8 +91,6 @@ router.delete("/:id", authMiddleware, deleteItem);
  *   get:
  *     summary: Obter um item específico do cardápio
  *     tags: [Itens do Cardápio]
- *     security:
- *       - bearerAuth: []
  *     parameters:
  *       - name: id
  *         in: path
@@ -107,8 +103,6 @@ router.delete("/:id", authMiddleware, deleteItem);
  *         description: Item encontrado
  *       404:
  *         description: Item não encontrado
- *       401:
- *         description: Usuário não autorizado
  */
 
 /**
@@ -184,4 +178,5 @@ router.delete("/:id", authMiddleware, deleteItem);
  *       401:
  *         description: Usuário não autorizado
  */
+
 export default router;

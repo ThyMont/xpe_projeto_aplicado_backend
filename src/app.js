@@ -8,6 +8,7 @@ import profileRoutes from "./routes/profile.route.js";
 import cardapioRoutes from "./routes/cardapio.route.js";
 import categoriaCardapioRoutes from "./routes/categoriaCardapio.route.js";
 import itemCardapioRoutes from "./routes/itemCardapio.route.js";
+import pedidoRouter from "./routes/pedido.route.js";
 
 const app = express();
 const port = 3000;
@@ -26,6 +27,7 @@ app.use("/profile", profileRoutes);
 app.use("/cardapio", cardapioRoutes);
 app.use("/categoria", categoriaCardapioRoutes);
 app.use("/itemCardapio", itemCardapioRoutes);
+app.use("/pedidos", pedidoRouter);
 
 // Iniciar o servidor
 app.listen(port, () => {

@@ -4,8 +4,11 @@ import authMiddleware from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 
+// Rota para editar um cardápio (autenticada)
 router.put("/:cardapioId", authMiddleware, editarCardapio);
-router.get("/:cardapioId", authMiddleware, listCategorias);
+
+// Rota para listar as categorias do cardápio (não autenticada)
+router.get("/:cardapioId", listCategorias);
 
 /**
  * @swagger
@@ -48,20 +51,9 @@ router.get("/:cardapioId", authMiddleware, listCategorias);
  *   get:
  *     summary: Lista as categorias do cardápio
  *     tags: [Cardápio]
- *     security:
- *       - bearerAuth: []
- *     parameters:
- *       - in: path
- *         name: cardapioId
- *         required: true
- *         description: ID do cardápio
- *         schema:
- *           type: integer
  *     responses:
  *       200:
  *         description: Lista de categorias do cardápio
- *       401:
- *         description: Não autorizado
  *       404:
  *         description: Cardápio não encontrado
  */

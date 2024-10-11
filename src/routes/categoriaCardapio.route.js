@@ -11,9 +11,9 @@ const router = express.Router();
 
 router.post("/", authMiddleware, createCategoria);
 
-router.put("/:id", authMiddleware, updateCategoria);
+router.get("/:id", getCategoria);
 
-router.get("/:id", authMiddleware, getCategoria);
+router.put("/:id", authMiddleware, updateCategoria);
 
 router.delete("/:id", authMiddleware, deleteCategoria);
 
@@ -63,8 +63,6 @@ router.delete("/:id", authMiddleware, deleteCategoria);
  *   get:
  *     summary: Listar todas as categorias
  *     tags: [Categorias]
- *     security:
- *       - bearerAuth: []
  *     responses:
  *       200:
  *         description: Lista de categorias
