@@ -19,6 +19,25 @@ class RegisterService {
 
     return newUser;
   }
+
+  async registerCliente({ nome, email, senha, telefone, endereco_entrega }) {
+    const existingCliente = await ClienteRepository.findByEmail(email);
+    if (existingCliente) {
+      throw new Error("Cliente já existe com esse email");
+    }
+
+    const hashedPassword = await bcrypt.hash(senha, 10);
+
+    const newCliente = await ClienteRepository.create({
+      nome,
+      email,
+      telefone,
+      endereco_entrega,
+      senha_hash: hashedPassword,
+    });
+
+    return newCliente;
+  }
 }
 
 export default new RegisterService();

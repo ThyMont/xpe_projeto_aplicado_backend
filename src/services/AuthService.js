@@ -27,6 +27,24 @@ class AuthService {
 
     return { token, user: usuarioSemSenha };
   }
+
+  async loginCliente({ email, senha }) {
+    const cliente = await ClienteRepository.findByEmail(email);
+    if (!cliente) {
+      throw new Error("Cliente não encontrado");
+    }
+
+    const isPasswordValid = await bcrypt.compare(senha, cliente.senha_hash);
+    if (!isPasswordValid) {
+      throw new Error("Senha incorreta");
+    }
+
+    const { senha_hash, ...clienteSemSenha } = cliente.toJSON();
+
+    const token = jwt.sign(clienteSemSenha, process.env.JWT_SECRET, { expiresIn: "12h" });
+
+    return { token, cliente: clienteSemSenha };
+  }
 }
 
 export default new AuthService();

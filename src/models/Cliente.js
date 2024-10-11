@@ -15,12 +15,18 @@ const Cliente = sequelize.define(
     },
     email: {
       type: DataTypes.STRING,
+      allowNull: false,
+      unique: true,
     },
     telefone: {
       type: DataTypes.STRING,
     },
     endereco_entrega: {
       type: DataTypes.STRING,
+    },
+    senha_hash: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
   },
   {
