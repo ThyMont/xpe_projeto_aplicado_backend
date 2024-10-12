@@ -1,4 +1,4 @@
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import UsuarioRepository from "../repositories/UsuarioRepository.js";
 import UsuarioSessaoRepository from "../repositories/UsuarioSessaoRepository.js";

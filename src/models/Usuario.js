@@ -24,12 +24,22 @@ const Usuario = sequelize.define(
     },
     telefone: {
       type: DataTypes.STRING,
+      allowNull: true,
+    },
+    createdAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
+    },
+    updatedAt: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      defaultValue: DataTypes.NOW,
     },
   },
   {
+    tableName: "Usuarios",
     timestamps: true,
-    createdAt: "criado_em",
-    updatedAt: false,
   }
 );
 

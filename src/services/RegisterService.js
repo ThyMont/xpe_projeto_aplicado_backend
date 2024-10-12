@@ -1,5 +1,5 @@
 import UsuarioRepository from "../repositories/UsuarioRepository.js";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 
 class RegisterService {
   async register({ nome, email, senha, telefone }) {
