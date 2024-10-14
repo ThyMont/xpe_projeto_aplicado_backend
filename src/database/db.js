@@ -1,16 +1,27 @@
 import { Sequelize } from "sequelize";
 import dotenv from "dotenv";
+import mysql2 from "mysql2";
 
 // Carregar as variáveis de ambiente do arquivo .env
 dotenv.config();
 
-// Criar a instância do Sequelize com os parâmetros do banco de dados
-const sequelize = new Sequelize(process.env.DB_NAME, process.env.DB_USER, process.env.DB_PASSWORD, {
+const options = {
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
   dialect: process.env.DB_DIALECT,
-  logging: false, // Você pode habilitar o log se quiser ver as queries SQL
-});
+  logging: false,
+};
+
+if (options.dialect === "mysql") {
+  options.dialectModule = mysql2;
+}
+// Criar a instância do Sequelize com os parâmetros do banco de dados
+const sequelize = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  options
+);
 
 // Teste de conexão
 sequelize
