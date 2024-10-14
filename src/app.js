@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.get("/", (req, res) => {
   res.send({ message: "API - Go Appa" });
 });
-
+app.use(express.static(path.join(__dirname, "dist")));
 app.use("/api-docs", express.static("dist/api-docs"));
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
