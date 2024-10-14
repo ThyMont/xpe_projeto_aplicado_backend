@@ -5,10 +5,10 @@ import authMiddleware from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
 // Rota para editar um cardápio (autenticada)
-router.put("/:cardapioId", authMiddleware, editarCardapio);
+router.put("/:id", authMiddleware, editarCardapio);
 
 // Rota para listar as categorias do cardápio (não autenticada)
-router.get("/:cardapioId", listCategorias);
+router.get("/:id", listCategorias);
 
 /**
  * @swagger
