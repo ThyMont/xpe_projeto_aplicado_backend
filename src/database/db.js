@@ -5,7 +5,7 @@ import pg from "pg";
 
 // Carregar as variáveis de ambiente do arquivo .env
 dotenv.config();
-const sequelize = null;
+let sequelize = null;
 
 const options = {
   host: process.env.DB_HOST,
