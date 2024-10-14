@@ -21,11 +21,19 @@ export default {
   plugins: [
     new CopyWebpackPlugin({
       patterns: [
-        { from: "./node_modules/swagger-ui-dist/swagger-ui.css", to: "." },
-        { from: "./node_modules/swagger-ui-dist/swagger-ui-bundle.js", to: "." },
-        { from: "./node_modules/swagger-ui-dist/swagger-ui-standalone-preset.js", to: "." },
-        { from: "./node_modules/swagger-ui-dist/favicon-16x16.png", to: "." },
-        { from: "./node_modules/swagger-ui-dist/favicon-32x32.png", to: "." },
+        { from: "node_modules/swagger-ui-dist/favicon-32x32.png", to: "api-docs/", toType: "dir" },
+        { from: "node_modules/swagger-ui-dist/favicon-16x16.png", to: "api-docs/", toType: "dir" },
+        { from: "node_modules/swagger-ui-dist/swagger-ui.css", to: "api-docs/", toType: "dir" },
+        {
+          from: "node_modules/swagger-ui-dist/swagger-ui-bundle.js",
+          to: "api-docs/",
+          toType: "dir",
+        },
+        {
+          from: "node_modules/swagger-ui-dist/swagger-ui-standalone-preset.js",
+          to: "api-docs/",
+          toType: "dir",
+        },
       ],
     }),
   ],
