@@ -26,7 +26,14 @@ if (options.dialect === "mysql") {
   };
 }
 if (process.env.POSTGRES_URL) {
-  sequelize = new Sequelize(process.env.POSTGRES_URL_NO_SSL);
+  sequelize = new Sequelize(process.env.POSTGRES_URL_NO_SSL, {
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
+  });
 } else {
   sequelize = new Sequelize(
     process.env.DB_NAME,
