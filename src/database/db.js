@@ -21,7 +21,7 @@ if (options.dialect === "mysql") {
   options.dialectOptions = {
     ssl: {
       require: true, // Habilita o uso do SSL
-      rejectUnauthorized: false, // Configure como true em produção para validar o certificado
+      rejectUnauthorized: true, // Configure como true em produção para validar o certificado
     },
   };
 }
