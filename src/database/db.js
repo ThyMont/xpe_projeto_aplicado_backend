@@ -5,6 +5,7 @@ import pg from "pg";
 
 // Carregar as variáveis de ambiente do arquivo .env
 dotenv.config();
+const sequelize = null;
 
 const options = {
   host: process.env.DB_HOST,
@@ -24,13 +25,16 @@ if (options.dialect === "mysql") {
     },
   };
 }
-// Criar a instância do Sequelize com os parâmetros do banco de dados
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
-  options
-);
+if (process.env.POSTGRES_URL_NO_SSL) {
+  sequelize = new Sequelize(process.env.POSTGRES_URL_NO_SSL);
+} else {
+  sequelize = new Sequelize(
+    process.env.DB_NAME,
+    process.env.DB_USER,
+    process.env.DB_PASSWORD,
+    options
+  );
+}
 
 // Teste de conexão
 sequelize
