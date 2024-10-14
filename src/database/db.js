@@ -17,6 +17,12 @@ if (options.dialect === "mysql") {
   options.dialectModule = mysql2;
 } else if (options.dialect === "postgres") {
   options.dialectModule = pg;
+  options.dialectOptions = {
+    ssl: {
+      require: true, // Habilita o uso do SSL
+      rejectUnauthorized: false, // Configure como true em produção para validar o certificado
+    },
+  };
 }
 // Criar a instância do Sequelize com os parâmetros do banco de dados
 const sequelize = new Sequelize(
