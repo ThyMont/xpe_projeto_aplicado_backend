@@ -2,7 +2,7 @@
   "name": "xpe_projeto_aplicado_backend",
   "version": "1.0.0",
   "engines": {
-    "node": "20.3.0"
+    "node": "20.15.0"
   },
   "type": "module",
   "description": "",

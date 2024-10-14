@@ -20,7 +20,7 @@ const port = process.env.PORT;
 app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
-  res.send("API - Go Appa");
+  res.send({ message: "API - Go Appa" });
 });
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 
