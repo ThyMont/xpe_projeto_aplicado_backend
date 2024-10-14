@@ -25,7 +25,7 @@ if (options.dialect === "mysql") {
     },
   };
 }
-if (process.env.POSTGRES_URL_NO_SSL) {
+if (process.env.POSTGRES_URL) {
   sequelize = new Sequelize(process.env.POSTGRES_URL_NO_SSL);
 } else {
   sequelize = new Sequelize(
