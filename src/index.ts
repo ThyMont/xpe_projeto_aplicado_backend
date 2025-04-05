@@ -20,7 +20,7 @@ app.get("/", (req, res) => {
 });
 
 // Rotas
-app.use("/auth", authRoutes);
+app.use("/api/auth", authRoutes);
 
 // Inicia o servidor
 app.listen(PORT, () => {
