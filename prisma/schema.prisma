@@ -8,9 +8,47 @@ datasource db {
 }
 
 model Usuario {
+  id         Int             @id @default(autoincrement())
+  nome       String
+  email      String          @unique
+  senha_hash String
+  criado_em  DateTime        @default(now())
+
+  recipientes   Recipiente[]     // relação 1:N
+  registros     RegistroAgua[]   // relação 1:N
+  metas         Meta[]           // relação 1:N
+}
+
+model Recipiente {
   id         Int      @id @default(autoincrement())
   nome       String
-  email      String   @unique
-  senha_hash String
+  volume_ml  Int
   criado_em  DateTime @default(now())
+
+  usuario     Usuario @relation(fields: [usuario_id], references: [id])
+  usuario_id  Int
+
+  registros   RegistroAgua[]     // relação opcional com ingestões
+}
+
+model RegistroAgua {
+  id             Int       @id @default(autoincrement())
+  quantidade_ml  Int
+  registrado_em  DateTime  @default(now())
+
+  usuario     Usuario    @relation(fields: [usuario_id], references: [id])
+  usuario_id  Int
+
+  recipiente     Recipiente? @relation(fields: [recipiente_id], references: [id])
+  recipiente_id  Int?
+}
+
+model Meta {
+  id            Int       @id @default(autoincrement())
+  quantidade_ml Int
+  criada_em     DateTime  @default(now())
+  ativa         Boolean   @default(true)
+
+  usuario     Usuario @relation(fields: [usuario_id], references: [id])
+  usuario_id  Int
 }
