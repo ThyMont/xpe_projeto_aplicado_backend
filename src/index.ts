@@ -14,20 +14,22 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middlewares
-const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [];
 
-app.use(
-  cors({
-    origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error("Origem não permitida pelo CORS"));
-      }
-    },
-    credentials: true,
-  })
-);
+app.use(cors());
+// const allowedOrigins = process.env.ALLOWED_ORIGINS?.split(",") || [];
+
+// app.use(
+//   cors({
+//     origin: (origin, callback) => {
+//       if (!origin || allowedOrigins.includes(origin)) {
+//         callback(null, true);
+//       } else {
+//         callback(new Error("Origem não permitida pelo CORS"));
+//       }
+//     },
+//     credentials: true,
+//   })
+// );
 app.use(express.json());
 
 setupSwagger(app);
