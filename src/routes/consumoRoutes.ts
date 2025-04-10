@@ -12,7 +12,7 @@ const router = express.Router();
  * @swagger
  * /api/consumo:
  *   post:
- *     summary: Registra um novo consumo de água usando o recipiente mais recente
+ *     summary: Registra um novo consumo usando o recipiente mais recente do usuário
  *     tags: [Consumo]
  *     security:
  *       - bearerAuth: []
@@ -31,8 +31,9 @@ const router = express.Router();
  *       401:
  *         description: Não autorizado
  *       500:
- *         description: Erro ao registrar consumo
+ *         description: Erro interno
  */
+
 router.post("/", authMiddleware, registrarConsumoController);
 
 /**

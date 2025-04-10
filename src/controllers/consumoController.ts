@@ -3,18 +3,18 @@ import { getConsumoHoje, getHistorico7Dias, registrarConsumo } from "../services
 
 export const registrarConsumoController = async (req: Request, res: Response): Promise<any> => {
   const usuarioId = (req as any).user.id;
-  const { quantidade_ml } = req.body;
-
-  if (!quantidade_ml || isNaN(quantidade_ml)) {
-    return res.status(400).json({ message: "Informe uma quantidade válida." });
-  }
 
   try {
     const registro = await registrarConsumo(usuarioId);
-    return res.status(201).json({ message: "Registro salvo com sucesso!", registro });
-  } catch (err) {
+    return res.status(201).json({
+      message: "Consumo registrado com sucesso!",
+      registro,
+    });
+  } catch (err: any) {
     console.error(err);
-    return res.status(500).json({ message: "Erro ao registrar consumo." });
+    return res.status(500).json({
+      message: err.message || "Erro ao registrar consumo.",
+    });
   }
 };
 
