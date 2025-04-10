@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { registerUser, loginUser } from "../services/authService";
+import { registerUser, loginUser, getUsuarioById } from "../services/authService";
 
 export const register = async (req: Request, res: Response): Promise<any> => {
   const { nome, email, senha } = req.body;
@@ -27,5 +27,17 @@ export const login = async (req: Request, res: Response): Promise<any> => {
     console.error(err);
     const status = err.message === "Credenciais inválidas." ? 401 : 500;
     return res.status(status).json({ message: err.message });
+  }
+};
+
+export const me = async (req: Request, res: Response): Promise<any> => {
+  const usuarioId = (req as any).user.id;
+
+  try {
+    const user = await getUsuarioById(usuarioId);
+    return res.status(200).json(user);
+  } catch (err: any) {
+    console.error(err);
+    return res.status(404).json({ message: err.message });
   }
 };

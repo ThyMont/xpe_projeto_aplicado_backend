@@ -23,11 +23,67 @@ const options: swaggerJsdoc.Options = {
           bearerFormat: "JWT",
         },
       },
+      schemas: {
+        Usuario: {
+          type: "object",
+          properties: {
+            id: { type: "integer", example: 1 },
+            nome: { type: "string", example: "Thyago Monteiro" },
+            email: { type: "string", example: "thyago@email.com" },
+          },
+        },
+        Meta: {
+          type: "object",
+          properties: {
+            id: { type: "integer" },
+            usuario_id: { type: "integer" },
+            quantidade_ml: { type: "integer" },
+            ativa: { type: "boolean" },
+            criada_em: { type: "string", format: "date-time" },
+          },
+        },
+        RegistroAgua: {
+          type: "object",
+          properties: {
+            id: { type: "integer" },
+            usuario_id: { type: "integer" },
+            quantidade_ml: { type: "integer" },
+            registrado_em: { type: "string", format: "date-time" },
+            recipiente_id: { type: "integer" },
+          },
+        },
+        Recipiente: {
+          type: "object",
+          properties: {
+            id: { type: "integer" },
+            nome: { type: "string" },
+            volume_ml: { type: "integer" },
+            usuario_id: { type: "integer" },
+            criado_em: { type: "string", format: "date-time" },
+          },
+        },
+        LoginResponse: {
+          type: "object",
+          properties: {
+            token: { type: "string", example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." },
+            user: {
+              $ref: "#/components/schemas/Usuario",
+            },
+          },
+        },
+      },
     },
     security: [
       {
         bearerAuth: [],
       },
+    ],
+    tags: [
+      { name: "Auth", description: "Autenticação e sessão" },
+      { name: "Meta", description: "Gerenciamento de metas de hidratação" },
+      { name: "Consumo", description: "Registros de ingestão de água" },
+      { name: "Dashboard", description: "Resumo geral da hidratação" },
+      { name: "Recipientes", description: "Recipientes personalizados" },
     ],
   },
   apis: ["./src/routes/*.ts"],

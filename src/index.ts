@@ -2,7 +2,11 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes";
+import metaRoutes from "./routes/metaRoutes";
 import { setupSwagger } from "./config/swagger";
+import consumoRoutes from "./routes/consumoRoutes";
+import dashboardRoutes from "./routes/dashboardRoutes";
+import recipienteRoutes from "./routes/recipientesRoutes";
 
 dotenv.config();
 
@@ -21,6 +25,10 @@ app.get("/", (req, res) => {
 
 // Rotas
 app.use("/api/auth", authRoutes);
+app.use("/api/meta", metaRoutes);
+app.use("/api/consumo", consumoRoutes);
+app.use("/api/dashboard", dashboardRoutes);
+app.use("/api/recipientes", recipienteRoutes);
 
 // Inicia o servidor
 app.listen(PORT, () => {

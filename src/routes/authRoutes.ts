@@ -1,9 +1,15 @@
-import express, { Response } from "express";
-import { register, login } from "../controllers/authController";
+import express from "express";
+import { register, login, me } from "../controllers/authController";
 import { authMiddleware } from "../middlewares/authMiddleware";
-import { IAuthRequest } from "../types/express";
 
 const router = express.Router();
+
+/**
+ * @swagger
+ * tags:
+ *   - name: Auth
+ *     description: Autenticação e gerenciamento de sessão
+ */
 
 /**
  * @swagger
@@ -64,6 +70,26 @@ router.post("/register", register);
  *     responses:
  *       200:
  *         description: Login bem-sucedido
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *                 user:
+ *                   type: object
+ *                   properties:
+ *                     id:
+ *                       type: integer
+ *                       example: 1
+ *                     nome:
+ *                       type: string
+ *                       example: Thyago Monteiro
+ *                     email:
+ *                       type: string
+ *                       example: thyago@email.com
  *       401:
  *         description: Credenciais inválidas
  */
@@ -80,14 +106,20 @@ router.post("/login", login);
  *     responses:
  *       200:
  *         description: Dados do usuário autenticado
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 id:
+ *                   type: integer
+ *                 nome:
+ *                   type: string
+ *                 email:
+ *                   type: string
  *       401:
  *         description: Token inválido ou não fornecido
  */
-router.get("/me", authMiddleware, (req: IAuthRequest, res: Response) => {
-  res.json({
-    message: "Rota protegida acessada com sucesso!",
-    user: req.user,
-  });
-});
+router.get("/me", authMiddleware, me);
 
 export default router;

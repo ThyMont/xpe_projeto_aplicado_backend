@@ -12,11 +12,30 @@ export const registerUser = async (nome: string, email: string, senha: string) =
 
   const senha_hash = await bcrypt.hash(senha, 10);
 
+  // Cria o usuário
   const novoUsuario = await prisma.usuario.create({
     data: {
       nome,
       email,
       senha_hash,
+    },
+  });
+
+  // Cria a meta padrão de 2000ml
+  await prisma.meta.create({
+    data: {
+      usuario_id: novoUsuario.id,
+      quantidade_ml: 2000,
+      ativa: true,
+    },
+  });
+
+  // Cria o recipiente padrão "Copo"
+  await prisma.recipiente.create({
+    data: {
+      usuario_id: novoUsuario.id,
+      nome: "Copo",
+      volume_ml: 200,
     },
   });
 
@@ -46,4 +65,21 @@ export const loginUser = async (email: string, senha: string) => {
       email: user.email,
     },
   };
+};
+
+export const getUsuarioById = async (id: number) => {
+  const user = await prisma.usuario.findUnique({
+    where: { id },
+    select: {
+      id: true,
+      nome: true,
+      email: true,
+    },
+  });
+
+  if (!user) {
+    throw new Error("Usuário não encontrado.");
+  }
+
+  return user;
 };
