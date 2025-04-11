@@ -49,12 +49,13 @@ export const getConsumoHoje = async (usuarioId: number) => {
 
 export const getHistorico8Dias = async (usuarioId: number) => {
   const hoje = new Date();
+  hoje.setHours(0, 0, 0, 0);
+
   const dias: { data: string; quantidade_ml: number }[] = [];
 
   for (let i = 7; i >= 0; i--) {
-    const data = new Date();
-    data.setDate(hoje.getDate() - i);
-    data.setHours(0, 0, 0, 0);
+    const data = new Date(hoje);
+    data.setDate(data.getDate() - i);
 
     const inicioDia = new Date(data);
     const fimDia = new Date(data);
