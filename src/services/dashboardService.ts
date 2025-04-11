@@ -36,7 +36,7 @@ export const getPainelResumo = async (usuarioId: number) => {
   return {
     meta_diaria: metaDiaria,
     consumo_hoje: consumoHoje,
-    progresso_percentual: progresso,
+    progresso_percentual: progresso > 100 ? 100 : progresso,
     recipiente_padrao: recipientePadrao ?? null,
   };
 };
