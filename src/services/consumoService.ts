@@ -1,6 +1,9 @@
 import { PrismaClient } from "@prisma/client";
+import { DateTime } from "luxon";
 
 const prisma = new PrismaClient();
+
+const TIMEZONE = "America/Sao_Paulo";
 
 export const registrarConsumo = async (usuarioId: number) => {
   const recipiente = await prisma.recipiente.findFirst({
@@ -24,13 +27,8 @@ export const registrarConsumo = async (usuarioId: number) => {
 };
 
 export const getConsumoHoje = async (usuarioId: number) => {
-  const agora = new Date();
-
-  const inicioDia = new Date(agora);
-  inicioDia.setHours(0, 0, 0, 0);
-
-  const fimDia = new Date(agora);
-  fimDia.setHours(23, 59, 59, 999);
+  const inicioDia = DateTime.now().setZone(TIMEZONE).startOf("day").toJSDate();
+  const fimDia = DateTime.now().setZone(TIMEZONE).endOf("day").toJSDate();
 
   const registros = await prisma.registroAgua.findMany({
     where: {
@@ -48,18 +46,13 @@ export const getConsumoHoje = async (usuarioId: number) => {
 };
 
 export const getHistorico8Dias = async (usuarioId: number) => {
-  const hoje = new Date();
-  hoje.setHours(0, 0, 0, 0);
-
+  const hoje = DateTime.now().setZone(TIMEZONE).startOf("day");
   const dias: { data: string; quantidade_ml: number }[] = [];
 
   for (let i = 7; i >= 0; i--) {
-    const data = new Date(hoje);
-    data.setDate(data.getDate() - i);
-
-    const inicioDia = new Date(data);
-    const fimDia = new Date(data);
-    fimDia.setHours(23, 59, 59, 999);
+    const dia = hoje.minus({ days: i });
+    const inicioDia = dia.startOf("day").toJSDate();
+    const fimDia = dia.endOf("day").toJSDate();
 
     const registros = await prisma.registroAgua.findMany({
       where: {
@@ -74,7 +67,7 @@ export const getHistorico8Dias = async (usuarioId: number) => {
     const total = registros.reduce((soma, r) => soma + r.quantidade_ml, 0);
 
     dias.push({
-      data: data.toISOString().split("T")[0],
+      data: dia.toFormat("yyyy-MM-dd"),
       quantidade_ml: total,
     });
   }
