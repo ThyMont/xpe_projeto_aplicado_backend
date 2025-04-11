@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { getConsumoHoje, getHistorico8Dias, registrarConsumo } from "../services/consumoService";
+import { getConsumoHoje, getHistorico7Dias, registrarConsumo } from "../services/consumoService";
 
 export const registrarConsumoController = async (req: Request, res: Response): Promise<any> => {
   const usuarioId = (req as any).user.id;
@@ -34,7 +34,7 @@ export const getHistoricoController = async (req: Request, res: Response): Promi
   const usuarioId = (req as any).user.id;
 
   try {
-    const historico = await getHistorico8Dias(usuarioId);
+    const historico = await getHistorico7Dias(usuarioId);
     return res.status(200).json(historico);
   } catch (err) {
     console.error(err);
