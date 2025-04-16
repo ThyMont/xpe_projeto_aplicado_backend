@@ -1,5 +1,5 @@
 import express from "express";
-import { register, login, me } from "../controllers/authController";
+import { register, login, me, refreshTokenController } from "../controllers/authController";
 import { authMiddleware } from "../middlewares/authMiddleware";
 
 const router = express.Router();
@@ -78,6 +78,9 @@ router.post("/register", register);
  *                 token:
  *                   type: string
  *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *                 refreshToken:
+ *                   type: string
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
  *                 user:
  *                   type: object
  *                   properties:
@@ -94,6 +97,42 @@ router.post("/register", register);
  *         description: Credenciais inválidas
  */
 router.post("/login", login);
+
+/**
+ * @swagger
+ * /api/auth/refresh:
+ *   post:
+ *     summary: Gera um novo access token a partir de um refresh token
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - refreshToken
+ *             properties:
+ *               refreshToken:
+ *                 type: string
+ *                 example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *     responses:
+ *       200:
+ *         description: Novo access token gerado com sucesso
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 token:
+ *                   type: string
+ *                   example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+ *       400:
+ *         description: Refresh token não fornecido
+ *       401:
+ *         description: Refresh token inválido ou expirado
+ */
+router.post("/refresh", refreshTokenController);
 
 /**
  * @swagger

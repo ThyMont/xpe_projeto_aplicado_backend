@@ -46,6 +46,18 @@ export const registerUser = async (nome: string, email: string, senha: string) =
   };
 };
 
+const generateTokens = (payload: object) => {
+  const accessToken = jwt.sign(payload, process.env.JWT_SECRET as string, {
+    expiresIn: "2h",
+  });
+
+  const refreshToken = jwt.sign(payload, process.env.JWT_REFRESH_SECRET as string, {
+    expiresIn: "7d",
+  });
+
+  return { accessToken, refreshToken };
+};
+
 export const loginUser = async (email: string, senha: string) => {
   const user = await prisma.usuario.findUnique({ where: { email } });
 
@@ -53,12 +65,11 @@ export const loginUser = async (email: string, senha: string) => {
     throw new Error("Credenciais inválidas.");
   }
 
-  const token = jwt.sign({ id: user.id, email: user.email }, process.env.JWT_SECRET as string, {
-    expiresIn: "2h",
-  });
+  const { accessToken, refreshToken } = generateTokens({ id: user.id, email: user.email });
 
   return {
-    token,
+    token: accessToken,
+    refreshToken,
     user: {
       id: user.id,
       nome: user.nome,
